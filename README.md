@@ -216,7 +216,7 @@ The FixIt theme balances **simplicity** and **extensibility** with extra [Hugo t
 - [shortcode-caniuse](https://github.com/hugo-fixit/shortcode-caniuse)\
   一个含有 caniuse shortcode 的 Hugo 主题组件。
 - [shortcode-docs-bookmark](https://github.com/hugo-fixit/shortcode-docs-bookmark)\
-  🔖 Embed bookmark of FixIt Docs.
+  �� Embed bookmark of FixIt Docs.
 - [shortcode-mmt-netease](https://github.com/hugo-fixit/shortcode-mmt-netease)\
   🎶 A Hugo theme component with a NetEase Cloud random comment shortcode.
 - [shortcode-rewards](https://github.com/hugo-fixit/shortcode-rewards)\
