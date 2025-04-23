@@ -686,7 +686,12 @@ class FixIt {
         if ($echarts.nextElementSibling.tagName === 'TEMPLATE') {
           const chart = echarts.init($echarts, this.isDark ? 'dark' : 'light', { renderer: 'svg' });
           stagingDOM.stage($echarts.nextElementSibling.content.cloneNode(true));
-          chart.setOption(stagingDOM.contentAsJson());
+          // support both JSON and JS object literal
+          if ($echarts.nextElementSibling.dataset.fmt === 'js') {
+            eval(`chart.setOption(${stagingDOM.contentAsText()})`);
+          } else {
+            chart.setOption(stagingDOM.contentAsJson());
+          }
           this._echartsArr.push(chart);
         }
       });
@@ -1071,10 +1076,10 @@ class FixIt {
         this.initEcharts();
         this.initTypeit();
         this.initMapbox();
+        this.fixTocScroll();
         this.initToc();
         this.initTocListener();
         this.initPangu();
-        this.fixTocScroll();
         this.util.forEach(document.querySelectorAll('.encrypted-hidden'), ($element) => {
           $element.classList.replace('encrypted-hidden', 'decrypted-shown');
         });
@@ -1310,9 +1315,9 @@ class FixIt {
       window.setTimeout(() => {
         this.initComment();
         if (!this.config.encryption?.all) {
+          this.fixTocScroll();
           this.initToc();
           this.initTocListener();
-          this.fixTocScroll();
         }
         this.onScroll();
         this.onResize();
