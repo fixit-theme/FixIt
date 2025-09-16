@@ -8,6 +8,10 @@
   .toc-content {
     font-size: $toc-content-font-size;
 
+    code {
+      @extend %code;
+    }
+
     ul {
       text-indent: -0.8em;
       padding-left: 0.8em;
@@ -69,7 +73,7 @@
 #toc-auto {
   display: block;
   position: sticky;
-  top: calc(#{$header-height} + var(--#{$prefix}breadcrumb-height));
+  top: calc(#{$header-height} + var(#{$rootPrefix}breadcrumb-height));
   box-sizing: border-box;
   visibility: hidden;
   @include overflow-wrap(break-word);
@@ -77,7 +81,7 @@
   @extend .print-d-none;
 
   [data-header-desktop='normal'] & {
-    --#{$prefix}scroll-mt: #{$global-scroll-margin-top};
+    #{$rootPrefix}scroll-mt: #{$global-scroll-margin-top};
   }
 
   .toc-title {
@@ -110,7 +114,8 @@
 
   .toc-content {
     overflow-y: scroll;
-    max-height: calc(100vh - #{2*$header-height});
+    // TODO 这里计算错误，待重构
+    max-height: calc(100vh - #{2 * $header-height});
     @include scrollbar-width(none, 0);
 
     &.always-active ul,

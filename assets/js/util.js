@@ -1,9 +1,14 @@
 export default class Util {
   forEach(elements, handler) {
     elements = elements || [];
+    const promises = [];
     for (let i = 0; i < elements.length; i++) {
-      handler(elements[i]);
+      const result = handler(elements[i], i);
+      if (result instanceof Promise) {
+        promises.push(result);
+      }
     }
+    return Promise.all(promises);
   }
 
   getScrollTop() {
@@ -42,7 +47,7 @@ export default class Util {
   isValidDate(date) {
     return date instanceof Date && !isNaN(date.getTime());
   }
-  
+
   /**
    * scroll some element into view
    * @param {String} selector element to scroll
@@ -109,6 +114,23 @@ export default class Util {
         reject();
       }
     });
-    return this.copyText(text); 
+    return this.copyText(text);
+  }
+
+  /**
+   * check if a string is a JS object string
+   * @example isObjectLiteral("{a:1,b:2}") // true
+   * @param {String} str string to check
+   * @returns {Boolean} whether the string is a JS object string
+   */
+  isObjectLiteral(str) {
+    if (typeof str !== 'string') {
+      return false;
+    }
+    str = str.replace(/\s+/g, ' ').trim().replace(/;$/, '')
+    if (str.startsWith('{') && str.endsWith('}')) {
+      return true;
+    }
+    return false;
   }
 }

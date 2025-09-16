@@ -24,25 +24,21 @@
 
 > It is based on the original [LoveIt](https://github.com/dillonzq/LoveIt) Theme, [KeepIt](https://github.com/Fastbyte01/KeepIt) Theme and [LeaveIt](https://github.com/liuzc/LeaveIt) Theme.
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/hugo-fixit/FixIt?style=flat)](https://github.com/hugo-fixit/FixIt/releases)
-[![Hugo](https://img.shields.io/badge/Hugo-%5E0.146.0-ff4088?style=flat&logo=hugo)](https://gohugo.io/)
-[![License](https://img.shields.io/github/license/hugo-fixit/FixIt?style=flat)](/LICENSE)
-[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/hugo-fixit/FixIt)
+[![Build](https://img.shields.io/github/deployments/hugo-fixit/FixIt/Production?style=flat&label=Build&logo=vercel)](https://demo.fixit.lruihao.cn/)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/hugo-fixit/FixIt?style=flat&label=Release&logo=github&include_prereleases)](https://github.com/hugo-fixit/FixIt/releases)
+[![Hugo](https://img.shields.io/badge/Hugo-%5E0.147.7-ff4088?style=flat&logo=hugo)](https://gohugo.io/)
+[![License](https://img.shields.io/github/license/hugo-fixit/FixIt?style=flat&label=License)](/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/hugo-fixit/FixIt?style=social)](https://github.com/hugo-fixit/FixIt)
+[![Gitee star of FixIt](https://gitee.com/lruihao/FixIt/badge/star.svg)](https://gitee.com/lruihao/FixIt/stargazers)
 
 ## Live Preview
 
 <p align="center">
-  💟 <a href="https://fixit.lruihao.cn">Production</a> | ❇️ <a href="https://pre.fixit.lruihao.cn">Preview</a> | 🚼 <a href="https://demo.fixit.lruihao.cn">Demo</a> | 🆕 <a href="https://hugo-fixit.github.io/hugo-fixit-starter/">Starter</a>
+  💟 <a href="https://fixit.lruihao.cn">Docs</a> | ❇️ <a href="https://demo.fixit.lruihao.cn/test/">Test</a> | 🚼 <a href="https://demo.fixit.lruihao.cn">Demo</a> | 🆕 <a href="https://hugo-fixit.github.io/hugo-fixit-starter/">Starter</a>
 <br>
 <br>
   More FixIt examples <a href="https://fixit.lruihao.cn/showcase/">here</a>.
 </p>
-
-## Why choose FixIt
-
-I don't know why 🤷.
-
-<!-- Too lazy to write... -->
 
 ## Usage
 
@@ -131,12 +127,12 @@ Click the following links to generate a new repository with template:
 
 ### Extended Features
 
-- **AI Summary**, **AI Search** and **AI Chatbot** supported by [PostChat](https://ai.tianli0.top/?InviteID=IRE1S88Z)
+- **AI Summary**, **AI Search** and **AI Chatbot** supported by [PostChat](https://ai.zhheo.com/console/login?InviteID=85041330)
 - **PWA (Progressive Web App)** supported
 - **Sub Menu** supported
 - **Content Encryption** supported (Pages, Partial)
 - **Friends** page embedded template
-- **Search** supported by [algolia](https://www.algolia.com/), [Fuse.js](https://fusejs.io/), CSE or [PostChat](https://ai.tianli0.top/?InviteID=IRE1S88Z)
+- **Search** supported by [algolia](https://www.algolia.com/), [Fuse.js](https://fusejs.io/), CSE or [PostChat](https://ai.zhheo.com/console/login?InviteID=85041330)
 - **Custom Search Engine (CSE)** supported by [Google](https://programmablesearchengine.google.com/)
 - **Twemoji** supported
 - Automatically **highlighting** code
@@ -145,14 +141,15 @@ Click the following links to generate a new repository with template:
 - Extended Markdown syntax for **[Font Awesome](https://fontawesome.com/) icons**
 - Extended Markdown syntax for **ruby annotation**
 - Extended Markdown syntax for **fraction**
-- **Mathematical formula** supported by [KaTeX](https://katex.org/)
+- Multiple **admonitions** shortcode or **alerts** extended Markdown syntax
+- **Tabs** and **Tab** shortcode with multiple design styles
+- **Mathematical formula** supported by [KaTeX](https://katex.org/) or [MathJax](https://www.mathjax.org)
 - **Diagrams** code fences extended and shortcode supported by [mermaid](https://github.com/knsv/mermaid)
 - **Interactive data visualization** shortcode and code fences extended supported by [ECharts](https://echarts.apache.org/)
 - **Timeline** code fences extended and shortcode supported
 - **Mapbox** shortcode supported by [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js)
 - **Music player** shortcode supported by [APlayer](https://github.com/MoePlayer/APlayer) and [MetingJS](https://github.com/metowolf/MetingJS)
 - **Bilibili player** and **Douyin player** shortcode
-- Kinds of **admonitions** shortcode
 - **Custom style** shortcode
 - **Custom script** shortcode
 - Open more **custom blocks**
@@ -200,7 +197,7 @@ The FixIt theme balances **simplicity** and **extensibility** with extra [Hugo t
 - [fixit-bundle](https://github.com/hugo-fixit/fixit-bundle)\
   🌲 Bundles the FixIt core theme and all hugo-fixit components into a single component.
 - [cmpt-flyfish](https://github.com/hugo-fixit/cmpt-flyfish)\
-  🐟 一个 canvas 实现的小鱼游动动画效果。
+  🐟 A canvas implemented animation effect of small fish swimming.
 - [cmpt-mdevtools](https://github.com/hugo-fixit/cmpt-mdevtools)\
   Mobile devtools component powered by vConsole and eruda.
 - [cmpt-translate](https://github.com/hugo-fixit/cmpt-translate)\
@@ -214,9 +211,11 @@ The FixIt theme balances **simplicity** and **extensibility** with extra [Hugo t
 - [shortcode-asciinema](https://github.com/hugo-fixit/shortcode-asciinema)\
   A Hugo theme component with asciinema-embed shortcode.
 - [shortcode-caniuse](https://github.com/hugo-fixit/shortcode-caniuse)\
-  一个含有 caniuse shortcode 的 Hugo 主题组件。
+  A Hugo theme component with caniuse shortcode.
 - [shortcode-docs-bookmark](https://github.com/hugo-fixit/shortcode-docs-bookmark)\
   🔖 Embed bookmark of FixIt Docs.
+- [shortcode-missing-translation](https://github.com/hugo-fixit/shortcode-missing-translation)\
+  A Hugo theme component with missing-translation shortcode.
 - [shortcode-mmt-netease](https://github.com/hugo-fixit/shortcode-mmt-netease)\
   🎶 A Hugo theme component with a NetEase Cloud random comment shortcode.
 - [shortcode-rewards](https://github.com/hugo-fixit/shortcode-rewards)\
@@ -273,6 +272,7 @@ Thanks to all the [contributors](https://github.com/hugo-fixit/FixIt/graphs/cont
 - [Sharer.js](https://github.com/ellisonleao/sharer.js)
 - [TypeIt](https://typeitjs.com/)
 - [KaTeX](https://katex.org/)
+- [MathJax](https://www.mathjax.org)
 - [mermaid](https://github.com/mermaid-js/mermaid)
 - [ECharts](https://echarts.apache.org/)
 - [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js)
@@ -293,6 +293,7 @@ Thanks to all the [contributors](https://github.com/hugo-fixit/FixIt/graphs/cont
 - [crypto-js](https://github.com/brix/crypto-js)
 - [pace](https://github.com/CodeByZach/pace)
 - [xxhash-wasm](https://github.com/jungomi/xxhash-wasm)
+- [`<tab-container>` element](https://github.com/github/tab-container-element)
 
 </details>
 

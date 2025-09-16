@@ -39,12 +39,9 @@ libFiles:
   gitalkJS: gitalk@1.7.2/dist/gitalk.min.js
   # instant.page@5.2.0 https://github.com/instantpage/instant.page
   instantPage: instant.page@5.2.0/instantpage.min.js
-  # katex@0.16.10 https://github.com/KaTeX/KaTeX
-  katexAutoRenderJS: katex@0.16.10/dist/contrib/auto-render.min.js
-  katexCopyTexJS: katex@0.16.10/dist/contrib/copy-tex.min.js
-  katexCSS: katex@0.16.10/dist/katex.min.css
-  katexJS: katex@0.16.10/dist/katex.min.js
-  katexMhchemJS: katex@0.16.10/dist/contrib/mhchem.min.js
+  # katex@0.16.22 https://github.com/KaTeX/KaTeX
+  katexCopyTexJS: katex@0.16.22/dist/contrib/copy-tex.min.js
+  katexCSS: katex@0.16.22/dist/katex.min.css
   # lightgallery@2.7.2 https://github.com/sachinchoolur/lightgallery
   lightgalleryCSS: lightgallery@2.7.2/css/lightgallery-bundle.min.css
   lightgalleryJS: lightgallery@2.7.2/lightgallery.min.js
@@ -64,10 +61,12 @@ libFiles:
   paceJS: pace-js@1.2.4
   # sharer.js@0.5.1 https://github.com/ellisonleao/sharer.js
   sharerJS: sharer.js@0.5.1/sharer.min.js
+  # @github/tab-container-element@4.8.2 https://github.com/github/tab-container-element
+  tabContainerElementJS: '@github/tab-container-element@4.8.2/dist/index.min.js'
   # twemoji@14.0.2 https://github.com/twitter/twemoji
   twemojiJS: twemoji@14.0.2/dist/twemoji.min.js
-  # twikoo@1.6.22 https://github.com/imaegoo/twikoo
-  twikooJS: twikoo@1.6.22/dist/twikoo.all.min.js
+  # twikoo@1.6.44 https://github.com/imaegoo/twikoo
+  twikooJS: twikoo@1.6.44/dist/twikoo.all.min.js
   # typeit@8.8.4 https://github.com/alexmacarthur/typeit
   typeitJS: typeit@8.8.4/dist/index.umd.js
   # valine@1.5.2 https://github.com/xCss/Valine
@@ -77,4 +76,3 @@ libFiles:
   walineJS: '@waline/client@3.4.1/dist/waline.umd.js'
   # xxhash-wasm@1.0.2 https://github.com/jungomi/xxhash-wasm
   xxhashWasmJS: xxhash-wasm@1.0.2/umd/xxhash-wasm.js
-  

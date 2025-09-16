@@ -1,3 +1,4 @@
+// TODO use ESLint to check the code style
 import Util from './util';
 
 class FixIt {
@@ -370,7 +371,7 @@ class FixIt {
     const $breadcrumbContainer = document.querySelector('.breadcrumb-container.sticky')
     this.breadcrumbHeight = $breadcrumbContainer?.clientHeight ?? 0;
     if (this.breadcrumbHeight) {
-      document.querySelector('main.container')?.style.setProperty('--fi-breadcrumb-height', `${this.breadcrumbHeight}px`);
+      document.querySelector('main.fi-container')?.style.setProperty('--fi-breadcrumb-height', `${this.breadcrumbHeight}px`);
     }
   }
 
@@ -518,6 +519,28 @@ class FixIt {
     });
   }
 
+  /**
+   * init diagram copy button
+   */
+  initDiagramCopyBtn() {
+    const stagingDOM = this.util.getStagingDOM()
+    this.util.forEach(document.querySelectorAll('.diagram-copy-btn'), ($btn) => {
+      $btn.addEventListener('click', () => {
+        stagingDOM.stage($btn.parentElement.querySelector('template').content.cloneNode(true))
+        const code = stagingDOM.contentAsText();
+        this.util.copyText(code).then(() => {
+          $btn.toggleAttribute('data-copied', true);
+          setTimeout(() => {
+            $btn.toggleAttribute('data-copied', false);
+          }, 2000);
+        }, () => {
+          console.error('Clipboard write failed!', 'Your browser does not support clipboard API!');
+        });
+      }, false);
+    });
+    stagingDOM.destroy();
+  }
+
   initTable(target = document) {
     this.util.forEach(target.querySelectorAll('.content table'), ($table) => {
       const $wrapper = document.createElement('div');
@@ -566,11 +589,11 @@ class FixIt {
       const $tocLiElements = $tocCore.getElementsByTagName('li');
       const $headingElements = document.getElementsByClassName('heading-element');
       const headerHeight = document.getElementById('header-desktop').offsetHeight;
-      document.querySelector('.container').addEventListener('resize', () => {
-        $toc.style.marginBottom = `${document.querySelector('.container').clientHeight - document.querySelector('.post-footer').offsetTop}px`;
+      document.querySelector('.fi-container').addEventListener('resize', () => {
+        $toc.style.marginBottom = `${document.querySelector('.fi-container').clientHeight - document.querySelector('.post-footer').offsetTop}px`;
       });
       this._tocOnScroll = this._tocOnScroll || (() => {
-        $toc.style.marginBottom = `${document.querySelector('.container').clientHeight - document.querySelector('.post-footer').offsetTop}px`;
+        $toc.style.marginBottom = `${document.querySelector('.fi-container').clientHeight - document.querySelector('.post-footer').offsetTop}px`;
         this.util.forEach($tocLinkElements, ($tocLink) => {
           $tocLink.classList.remove('active');
         });
@@ -635,40 +658,6 @@ class FixIt {
     }
   }
 
-  initMath(target = document.body) {
-    if (this.config.math) {
-      renderMathInElement(target, this.config.math);
-    }
-  }
-
-  initMermaid() {
-    if (!this.config.mermaid) {
-      return;
-    }
-    const _initializeAndRun = () => {
-      const themes = this.config.mermaid.themes ?? ['default', 'dark'];
-      window.mermaid.initialize({
-        securityLevel: 'loose',
-        startOnLoad: false,
-        theme: this.isDark ? themes[1] : themes[0],
-      });
-      window.mermaid.run()
-    }
-    _initializeAndRun()
-    this.switchThemeEventSet.add(() => {
-      // Reinitialize and run mermaid when theme changes.
-      this.util.forEach(document.querySelectorAll('.mermaid[data-processed]'), ($mermaid) => {
-        $mermaid.dataset.processed = ''
-        $mermaid.innerHTML = ''
-        $mermaid.appendChild($mermaid.nextElementSibling.content.cloneNode(true))
-      })
-      _initializeAndRun()
-    });
-    this.beforeprintEventSet.add(() => { 
-      // Set the theme to neutral when printing.
-    });
-  }
-
   initEcharts() {
     if (!this.config.echarts) {
       return;
@@ -683,17 +672,53 @@ class FixIt {
       this._echartsArr = [];
       const stagingDOM = this.util.getStagingDOM()
       this.util.forEach(document.getElementsByClassName('echarts'), ($echarts) => {
-        if ($echarts.nextElementSibling.tagName === 'TEMPLATE') {
-          const chart = echarts.init($echarts, this.isDark ? 'dark' : 'light', { renderer: 'svg' });
-          stagingDOM.stage($echarts.nextElementSibling.content.cloneNode(true));
-          // support both JSON and JS object literal
-          if ($echarts.nextElementSibling.dataset.fmt === 'js') {
-            eval(`chart.setOption(${stagingDOM.contentAsText()})`);
-          } else {
-            chart.setOption(stagingDOM.contentAsJson());
-          }
-          this._echartsArr.push(chart);
+        const $dataEl = $echarts.nextElementSibling;
+        if ($dataEl.tagName !== 'TEMPLATE') {
+          return;
         }
+        const chart = echarts.init($echarts, this.isDark ? 'dark' : 'light', { renderer: 'svg' });
+        chart.showLoading();
+        stagingDOM.stage($dataEl.content.cloneNode(true));
+        const _setOption = (option) => {
+          if (!option) {
+            chart.hideLoading();
+            console.warn('ECharts option is missing or invalid. Chart disposed.', {
+              element: $echarts,
+              option: $dataEl,
+            });
+            chart.dispose();
+            $echarts.removeAttribute('style');
+            return;
+          }
+          chart.hideLoading();
+          chart.setOption(option);
+          this._echartsArr.push(chart);
+        };
+        // support JS object literal or JS code
+        if ($dataEl.dataset.fmt === 'js') {
+          try {
+            const jsCodes = stagingDOM.contentAsText();
+            /**
+             * Get ECharts option
+             * @param {Object} fixit FixIt instance
+             * @param {Object} chart ECharts instance
+             * @returns {Object|Promise} ECharts option or Promise
+             */
+            const _getOption = new Function('fixit', 'chart',
+              this.util.isObjectLiteral(jsCodes) ? `return ${jsCodes}` : jsCodes
+            );
+            if ($dataEl.dataset.async === 'true') {
+              return Promise.resolve(_getOption(this, chart)).then(option => {
+                _setOption(option);
+              });
+            }
+            return _setOption(_getOption(this, chart));
+          } catch (err) {
+            return console.error(err);
+          }
+        }
+        // support JSON
+        _setOption(stagingDOM.contentAsJson());
       });
       stagingDOM.destroy();
     });
@@ -1028,19 +1053,10 @@ class FixIt {
   }
 
   initWatermark() {
-    this.config.watermark?.enable &&
-      new Watermark({
-        content: this.config.watermark.content || `${document.querySelector('footer .fixit-icon')?.outerHTML ?? ''} FixIt Theme`,
-        appendTo: '.widgets',
-        opacity: this.config.watermark.opacity,
-        width: this.config.watermark.width,
-        height: this.config.watermark.height,
-        rowSpacing: this.config.watermark.rowspacing,
-        colSpacing: this.config.watermark.colspacing,
-        rotate: this.config.watermark.rotate,
-        fontSize: this.config.watermark.fontsize,
-        fontFamily: this.config.watermark.fontfamily
-      });
+    if (!this.config.watermark?.enable) {
+      return;
+    }
+    new Watermark(this.config.watermark);
   }
 
   initPangu() {
@@ -1063,6 +1079,10 @@ class FixIt {
     pangu.autoSpacingPage();
   }
 
+  initMathJax() {
+    window.MathJax?.typeset && window.MathJax.typeset();
+  }
+
   initFixItDecryptor() {
     this.decryptor = new FixItDecryptor({
       decrypted: () => {
@@ -1070,9 +1090,8 @@ class FixIt {
         this.initDetails();
         this.initLightGallery();
         this.initCodeWrapper();
+        this.initDiagramCopyBtn();
         this.initTable();
-        this.initMath();
-        this.initMermaid();
         this.initEcharts();
         this.initTypeit();
         this.initMapbox();
@@ -1080,6 +1099,8 @@ class FixIt {
         this.initToc();
         this.initTocListener();
         this.initPangu();
+        this.initMathJax();
+        window.FixItMermaid?.init?.();
         this.util.forEach(document.querySelectorAll('.encrypted-hidden'), ($element) => {
           $element.classList.replace('encrypted-hidden', 'decrypted-shown');
         });
@@ -1089,13 +1110,14 @@ class FixIt {
         this.initDetails($content);
         this.initLightGallery();
         this.initCodeWrapper();
+        this.initDiagramCopyBtn();
         this.initTable($content);
-        this.initMath($content);
-        this.initMermaid();
         this.initEcharts();
         this.initTypeit($content);
         this.initMapbox();
         this.initPangu();
+        this.initMathJax();
+        window.FixItMermaid?.init?.();
         this.util.forEach($content.querySelectorAll('.encrypted-hidden'), ($element) => {
           $element.classList.replace('encrypted-hidden', 'decrypted-shown');
         });
@@ -1290,9 +1312,8 @@ class FixIt {
         this.initDetails();
         this.initLightGallery();
         this.initCodeWrapper();
+        this.initDiagramCopyBtn();
         this.initTable();
-        this.initMath();
-        this.initMermaid();
         this.initEcharts();
         this.initTypeit();
         this.initMapbox();
@@ -1327,6 +1348,12 @@ class FixIt {
     } catch (err) {
       console.error(err);
     }
+    console.log(
+      `%c FixIt ${this.config.version} %c https://github.com/hugo-fixit %c`,
+      `background: #FF735A;border:1px solid #FF735A; padding: 1px; border-radius: 2px 0 0 2px; color: #fff;`,
+      `border:1px solid #FF735A; padding: 1px; border-radius: 0 2px 2px 0; color: #FF735A;`,
+      'background:transparent;'
+    );
   }
 }
 
