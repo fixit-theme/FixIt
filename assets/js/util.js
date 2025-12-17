@@ -20,7 +20,7 @@ export default class Util {
   }
 
   isTocStatic() {
-    return window.matchMedia('only screen and (max-width: 960px)').matches;
+    return document.getElementById('toc-static').dataset.kept === 'true' || window.matchMedia('only screen and (max-width: 960px)').matches;
   }
 
   /**
@@ -132,5 +132,18 @@ export default class Util {
       return true;
     }
     return false;
+  }
+
+  /**
+   * count digits of a number
+   * @param {Number} n integer number
+   * @returns {Number} digit count
+   */
+  digitCount(n) {
+    const t = Number(n);
+    if (!Number.isInteger(t)) {
+      throw new Error('The parameter must be an integer number.');
+    }
+    return Math.abs(t).toString().length;
   }
 }
