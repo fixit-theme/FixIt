@@ -43,16 +43,24 @@ pre:not([data-processed]) {
   font-size: $code-block-font-size;
   font-family: $code-font-family;
 
-  .table-wrapper {
+  .code-wrapper {
+    position: relative;
     #{$rootPrefix}scrollbar-thumb-color: initial;
+
+    > table {
+      width: 100%;
+      max-width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+
     > table,
     > table thead,
     > table tr,
     > table td {
       margin: 0;
       padding: 0;
-      border: none !important;
-      white-space: nowrap;
+      border: none;
     }
   }
 }
@@ -61,18 +69,19 @@ pre:not([data-processed]) {
 .highlight {
   margin: 0.5rem 0;
   position: relative;
-  counter-reset: codeNos calc(var(#{$rootPrefix}linenostart) - 1);
-  @include border-radius($global-border-radius);
-  // attr() for arbitrary properties is currently only supported in Chromium-based browsers (see https://caniuse.com/css3-attr);
-  // non-supporting browsers fall back to values set via initCodeCompatibility() in JavaScript.
-  #{$rootPrefix}max-shown-lines: attr(data-max number, 10);
-  #{$rootPrefix}linenostart: attr(data-linenostart number, 1);
 
-  .table-wrapper {
+  .code-wrapper {
     overflow: hidden;
     height: auto;
+    counter-reset: codeNos calc(var(#{$rootPrefix}line-start) - 1);
+    @include border-radius($global-border-radius);
     @include transition(height 0.5s ease-out);
     @include border-radius($global-border-radius);
+    // attr() for arbitrary properties is currently only supported in Chromium-based browsers (see https://caniuse.com/css3-attr);
+    // non-supporting browsers fall back to values set via Hugo templating in render-codeblock.html
+    #{$rootPrefix}max-shown-lines: attr(data-max number, 10);
+    #{$rootPrefix}line-start: attr(data-line-start number, 1);
+    #{$rootPrefix}line-digit: attr(data-line-digit number, 1);
   }
 
   > .chroma {
@@ -83,7 +92,6 @@ pre:not([data-processed]) {
     }
 
     .lntable {
-      border-spacing: 0;
       width: auto;
       overflow: auto;
       display: block;
@@ -135,7 +143,7 @@ pre:not([data-processed]) {
     @include border-radius($global-border-radius $global-border-radius 0 0);
     @include transition(border-radius 0s);
 
-    + .table-wrapper {
+    + .code-wrapper {
       @include border-radius(0 0 $global-border-radius $global-border-radius);
 
       > pre.chroma {
@@ -235,10 +243,10 @@ pre:not([data-processed]) {
   }
 
   &:has(.code-expand-btn):not(.is-expanded, .is-collapsed) {
-    .table-wrapper {
+    .code-wrapper {
       height: calc(1.45em * var(#{$rootPrefix}max-shown-lines) + var(#{$rootPrefix}code-expand-offset, 0.5rem));
     }
-    &[data-mode='mac'] .table-wrapper {
+    &[data-mode='mac'] .code-wrapper {
       #{$rootPrefix}code-expand-offset: 1.875rem + 0.5rem;
     }
   }
@@ -264,7 +272,7 @@ pre:not([data-processed]) {
         #{$rootPrefix}code-header-bg: #{darken($code-background-color-dark, 6%)};
       }
 
-      + .table-wrapper {
+      + .code-wrapper {
         height: 0;
       }
     }
@@ -333,7 +341,7 @@ pre:not([data-processed]) {
       }
     }
     .lntd:last-child pre.chroma,
-    .table-wrapper > pre.chroma {
+    .code-wrapper > pre.chroma {
       code {
         text-wrap: wrap;
       }
@@ -342,7 +350,7 @@ pre:not([data-processed]) {
 
   // line number for code block with line wrapping or lineNos=false
   &.line-wrapping:not(.line-nos-hidden) .lntd:last-child pre.chroma,
-  &:not(.line-nos-hidden) .table-wrapper > pre.chroma:not(:has(.ln)) {
+  &:not(.line-nos-hidden) .code-wrapper > pre.chroma:not(:has(.ln)) {
     padding-left: 0;
     > code > .line {
       display: flex;
@@ -352,7 +360,7 @@ pre:not([data-processed]) {
         content: counter(codeNos);
         text-wrap: nowrap;
         text-align: right;
-        min-width: var(#{$rootPrefix}line-nos-width, 1ch);
+        min-width: calc(var(#{$rootPrefix}line-digit) * 1ch);
         padding-inline: 0.75rem;
         flex-shrink: 0;
         color: var(#{$rootPrefix}global-font-secondary-color);
@@ -362,7 +370,7 @@ pre:not([data-processed]) {
   }
 
   // add sticky effect for line number column when lineNos=false
-  &:not(.line-nos-hidden) .table-wrapper > pre.chroma > code > .line::before {
+  &:not(.line-nos-hidden) .code-wrapper > pre.chroma > code > .line::before {
     position: sticky;
     left: 0;
   }
@@ -414,7 +422,14 @@ pre:not([data-processed]) {
     }
   }
 
-  &:not([data-mode='classic']) {
+  &[data-mode='simple'] {
+    pre.chroma {
+      padding-block: 0.875rem;
+    }
+  }
+
+  // add border for non-classic mode
+  &.code-block:not([data-mode='classic']) {
     border: 1px solid darken($code-background-color, 3%);
 
     [data-theme='dark'] & {
@@ -427,6 +442,9 @@ pre:not([data-processed]) {
 
 // gist shortcode
 .gist {
+  background-color: var(#{$rootPrefix}code-block-background-color);
+  @include border-radius($global-border-radius $global-border-radius 0 0);
+  
   .gist-file,
   .gist-data,
   .gist-meta {
@@ -434,7 +452,11 @@ pre:not([data-processed]) {
   }
 
   .gist-data {
-    background-color: transparent;
+    background-color: inherit;
+
+    .blob-wrapper {
+      padding-block: 0.5rem;
+    }
   }
 
   .gist-meta {
@@ -444,20 +466,15 @@ pre:not([data-processed]) {
     background-color: var(#{$rootPrefix}gist-meta-background-color);
   }
 
-  .table-wrapper {
-    padding-block: 0.5rem;
-    background-color: var(#{$rootPrefix}code-block-background-color);
-    @include border-radius($global-border-radius $global-border-radius 0 0);
+  table.highlight {
+    margin: 0;
+    background-color: inherit;
 
-    .highlight {
-      background-color: transparent;
-
-      td.blob-num {
-        position: sticky;
-        left: 0;
-        background-color: var(#{$rootPrefix}code-block-background-color);
-        @include z-index(0, 1);
-      }
+    td.blob-num {
+      position: sticky;
+      left: 0;
+      background-color: var(#{$rootPrefix}code-block-background-color);
+      @include z-index(0, 1);
     }
   }
 
