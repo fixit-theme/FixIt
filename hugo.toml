@@ -38,6 +38,15 @@ enableEmoji = true
 # mainSections = ["posts"]
 
 # -------------------------------------------------------------------------------------
+# Imaging Configuration
+# See: https://gohugo.io/configuration/imaging/
+# -------------------------------------------------------------------------------------
+
+[imaging]
+_merge = "shallow"
+quality = 75
+
+# -------------------------------------------------------------------------------------
 # Menu Configuration
 # See: https://fixit.lruihao.cn/documentation/basics/#menu-configuration
 # -------------------------------------------------------------------------------------
@@ -659,9 +668,11 @@ orderby = "name" # Order of tags, optional values: ["name", "count"]
 # Home page profile
 [params.home.profile]
 enable = false
+# FixIt 0.4.0 | NEW Whether to show profile and content only in the first home page
+onlyFirstPage = false
 # Gravatar Email for preferred avatar in home page
 gravatarEmail = ""
-# URL of avatar shown in home page
+# URL of avatar shown in home page, default is author's avatar
 avatarURL = ""
 # FixIt 0.2.17 | NEW identifier of avatar menu link
 avatarMenu = ""
@@ -1081,11 +1092,15 @@ feedId = ""
 userId = ""
 
 # FixIt 0.3.17 | NEW Image config
+# Combined with Hugo's image processing option `imaging` for image optimisation
 [params.image]
 # cache remote images for better optimisations
 cacheRemote = false
-# Image resizing and optimisation
+# Image resizing and optimisation (may slow builds)
 optimise = false
+# FixIt 0.4.0 | NEW A list of image file names or patterns to exclude from optimisation
+# e.g. ["no-optimize.jpg", "*.tiff", "images/exclude-*.webp"]
+blackList = []
 
 # FixIt 0.4.0 | NEW Code block wrapper config
 # you can override the global config via Markdown attributes, for example:
@@ -1108,7 +1123,7 @@ maxShownLines = 10
 copyable = true
 # [classic] whether to enable line numbers toggle button in the code block header
 lineNosToggler = true
-# [classic] whether to enable toggle line wrapping in the code block header
+# [classic] whether to enable toggle line wrapping button in the code block header
 lineWrapToggler = true
 # [classic][Experimental] whether to enable code edit button in the code block header
 editable = false
@@ -1337,14 +1352,6 @@ geolocate = true
 scale = true
 # whether to add FullscreenControl
 fullscreen = true
-
-# FixIt 0.3.0 | NEW [Experimental] cache remote images locally
-# See: https://github.com/hugo-fixit/FixIt/pull/362
-# TODO remove (works on image-legacy.html)
-[params.page.cacheRemoteImages]
-enable = false
-# replace remote image URL with local image URL (place in public/images/remote/)
-replace = false
 
 # FixIt 0.3.0 | NEW Related content config (https://gohugo.io/content-management/related/)
 [params.page.related]

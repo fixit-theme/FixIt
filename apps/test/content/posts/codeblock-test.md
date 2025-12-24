@@ -8,6 +8,7 @@ categories:
 tags:
   - Code Block
 ---
+
 Testing code block in FixIt theme.
 
 <!--more-->
@@ -193,4 +194,6 @@ function isObjectLiteral(str) {
 
 ## Gist Embed
 
+{{< env "production" >}}
 {{< gist Lruihao fb8b2d0353465c4d40bf74818db80710 >}}
+{{< /env >}}
