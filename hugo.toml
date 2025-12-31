@@ -2,7 +2,7 @@
 # It's recommended to use Alternate Theme Config to configure FixIt
 # Modifying this file may result in merge conflict
 # There are currently some restrictions to what a theme component can configure:
-# params, menu, outputformats and mediatypes
+# params, menu(s), outputformats and mediatypes
 # =====================================================================================
 
 # -------------------------------------------------------------------------------------
@@ -51,9 +51,9 @@ quality = 75
 # See: https://fixit.lruihao.cn/documentation/basics/#menu-configuration
 # -------------------------------------------------------------------------------------
 
-[menu]
+[menus]
 
-[[menu.main]]
+[[menus.main]]
 identifier = "archives"
 parent = ""
 # you can add extra information before the name (HTML format is supported), such as icons
@@ -67,7 +67,7 @@ title = ""
 weight = 1
 
 # FixIt 0.2.14 | NEW add user-defined content to menu items
-[menu.main.params]
+[menus.main.params]
 # add css class to a specific menu item
 class = ""
 # whether set as a draft menu item whose function is similar to a draft post/page
@@ -79,7 +79,7 @@ type = ""
 # FixIt 0.3.9 | NEW whether to show the submenu item divider line
 divided = false
 
-[[menu.main]]
+[[menus.main]]
 identifier = "categories"
 parent = ""
 pre = ""
@@ -89,10 +89,10 @@ url = "/categories/"
 title = ""
 weight = 2
 
-[menu.main.params]
+[menus.main.params]
 icon = "fa-solid fa-folder-tree"
 
-[[menu.main]]
+[[menus.main]]
 identifier = "tags"
 parent = ""
 pre = ""
@@ -102,7 +102,7 @@ url = "/tags/"
 title = ""
 weight = 3
 
-[menu.main.params]
+[menus.main.params]
 icon = "fa-solid fa-tags"
 
 # -------------------------------------------------------------------------------------
@@ -404,7 +404,7 @@ collection = "collections"
 
 [params]
 # FixIt 0.2.15 | CHANGED FixIt theme version
-version = "0.3.X" # e.g. "0.2.X", "0.2.15", "v0.2.15" etc.
+version = "0.4.X" # e.g. "0.2.X", "0.2.15", "v0.2.15" etc.
 # site description
 description = ""
 # site keywords
@@ -414,7 +414,7 @@ defaultTheme = "auto"
 # which hash function used for SRI, when empty, no SRI is used
 # ["sha256", "sha384", "sha512", "md5"]
 fingerprint = ""
-# NEW date format
+# date format
 dateFormat = "2006-01-02"
 # website images for Open Graph and Twitter Cards
 images = []
@@ -496,6 +496,8 @@ snippetLength = 30
 highlightTag = "em"
 # whether to use the absolute URL based on the baseURL in search index
 absoluteURL = false
+# FixIt 0.4.0 | NEW whether to enable anchorify for headings in search results
+anchorify = true
 
 [params.search.algolia]
 index = ""
@@ -601,8 +603,8 @@ animate = true
 icon = "fa-solid fa-heartbeat"
 pre = ""
 value = ""
-
 # e.g. "2021-12-18T16:15:22+08:00"
+
 # FixIt 0.2.17 | NEW footer lines order, optional values: ["first", 0, 1, 2, 3, 4, 5, "last"]
 [params.footer.order]
 powered = 0
@@ -784,14 +786,16 @@ Bluesky = ""
 Phone = ""
 Email = ""
 RSS = true
+
 # custom social links like the following
 # [params.social.twitter]
-#   id = "lruihao"
-#   weight = 3
-#   prefix = "https://twitter.com/"
-#   Title = "Twitter"
-#   [social.twitter.icon]
-#     class = "fa-brands fa-x-twitter fa-fw"
+# id = "lruihao"
+# weight = 3
+# prefix = "https://twitter.com/"
+# Title = "Twitter"
+
+# [params.social.twitter.icon]
+# class = "fa-brands fa-x-twitter fa-fw"
 
 # TypeIt config
 [params.typeit]
@@ -1138,7 +1142,7 @@ sort = false
 boxed = true
 
 # FixIt 0.3.12 | NEW Custom partials config
-# Custom partials must be stored in the /layouts/partials/ directory.
+# Custom partials must be stored in the /layouts/_partials/ directory.
 # Depends on open custom blocks https://fixit.lruihao.cn/references/blocks/
 [params.customPartials]
 head = []
@@ -1166,6 +1170,7 @@ enable = false
 c4u = false
 
 # Page config
+# TODO migrate mapping key to `params` layer in the future
 [params.page]
 # FixIt 0.2.18 | NEW whether to enable the author's avatar of the post
 authorAvatar = true
@@ -1290,7 +1295,7 @@ errorColor = "#ff4949"
 # custom macros map
 # syntax: <macro> = <definition>
 [params.page.math.katex.macros]
-# "\\f" = "#1f(#2)"  # usage: $\f{a}{b}$
+# "\\f" = "#1f(#2)" # usage: $\f{a}{b}$
 
 # MathJax server-side rendering (https://www.mathjax.org)
 # MathJax config: https://docs.mathjax.org/en/latest/options/index.html
@@ -1303,7 +1308,7 @@ cdn = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
 # custom macros map
 # syntax: <macro> = <definition>
 [params.page.math.mathjax.macros]
-# bold = ["{\\bf #1}", 1]  # usage: $\bold{math}$
+# bold = ["{\\bf #1}", 1] # usage: $\bold{math}$
 
 [params.page.math.mathjax.loader]
 load = [ "ui/safe" ]
@@ -1312,6 +1317,7 @@ load = [ "ui/safe" ]
 # custom = "https://cdn.jsdelivr.net/gh/sonoisa/XyJax-v3@3.0.1/build/"
 
 # more loader config e.g source, dependencies, provides etc.
+
 [params.page.math.mathjax.options]
 enableMenu = true
 # HTML tags that won't be searched for math
