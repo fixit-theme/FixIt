@@ -114,7 +114,7 @@
         top: 50%;
         transform: translateY(-50%);
         z-index: 1;
-        color: var(#{$rootPrefix}hr-before-color);
+        color: var(#{$rootPrefix}hr-active-color);
         content: '\f0c4';
         font-size: 20px;
         line-height: 1;
@@ -510,7 +510,8 @@
       margin-top: 0.5rem;
     }
   }
-  
+
+  // TODO Reorganization import
   @import '../_shortcodes';
   @import '../_partials/_single/alert';
   @import '../_partials/_single/code';
